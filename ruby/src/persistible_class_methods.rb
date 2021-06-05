@@ -14,7 +14,7 @@ module Persistible
     end
 
     def descendants
-      ObjectSpace.each_object(Class).select { |klass| klass <= self }
+      ObjectSpace.each_object(Class).select { |klass| klass <= self }.reject(&:singleton_class?)
     end
 
     def get_validates(no_blank, from, to, validate)
