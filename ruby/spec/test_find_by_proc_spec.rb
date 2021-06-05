@@ -23,9 +23,13 @@ describe 'test_find_by_proc' do
     otro_estudiante
   end
 
-  # it 'retorna los estudiantes con id igual a 5' do
-  #   Student.find_by_id("5")
-  # end
+  it 'retorna los estudiantes con id igual a 5' do
+    un_estudiante.save!
+    otro_estudiante.save!
+
+    estudiantes_con_id_5 = Student.find_by_id("5")
+    expect(estudiantes_con_id_5.length).to be 0
+  end
 
   it 'retorna los estudiantes con grade mayor a 6' do
     un_estudiante.save!
@@ -40,6 +44,7 @@ describe 'test_find_by_proc' do
     un_estudiante.save!
     otro_estudiante.save!
 
-    expect {Student.find_by_full_name(proc { |name| name.this_message_doesnt_exist()})}.to raise_error(NoMethodError)
+    un_proc = proc { |name| name.this_message_doesnt_exist()}
+    expect {Student.find_by_full_name(un_proc)}.to raise_error(NoMethodError)
   end
 end
