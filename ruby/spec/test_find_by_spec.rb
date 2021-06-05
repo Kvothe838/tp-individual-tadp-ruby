@@ -167,5 +167,7 @@ describe 'test_find_by' do
 
       expect(personas.size).to be 2
     end
+
+
   end
 end

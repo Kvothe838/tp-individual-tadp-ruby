@@ -64,8 +64,18 @@ module Persistible
 
     def method_missing(m, *args, &block)
       if es_find_by(m)
+        primer_parametro = args[0]
+        nombre_metodo = m.to_s.delete_prefix('find_by_')
+
         all_instances!.filter do |instancia|
-          instancia.send(m.to_s.delete_prefix('find_by_'), *args[1, args.size]) === args[0]
+          case primer_parametro
+          when Proc
+            valor_atributo_instancia = instancia.send(nombre_metodo)
+            instancia.instance_exec(*valor_atributo_instancia, &primer_parametro)
+          else
+            valor_atributo_instancia =  instancia.send(nombre_metodo, *args[1, args.size])
+            valor_atributo_instancia === primer_parametro
+          end
         end
       else
         super
